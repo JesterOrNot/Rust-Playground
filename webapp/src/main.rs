@@ -1,9 +1,12 @@
 #![feature(proc_macro_hygiene, decl_macro)]
-#[macro_use] extern crate rocket;
+#[macro_use]
+extern crate rocket;
+use std::io::Result;
+use rocket::response::NamedFile;
 
 #[get("/")]
-fn index() -> std::io::Result<rocket::response::NamedFile> {
-    rocket::response::NamedFile::open("www/index.html")
+fn index() -> Result<NamedFile> {
+    NamedFile::open("www/index.html")
 }
 
 fn main() {
