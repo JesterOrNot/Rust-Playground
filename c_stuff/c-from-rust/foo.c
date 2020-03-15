@@ -5,5 +5,5 @@ int doubler(int n) {
 }
 
 void hello() {
-    printf("Hello world from C!");
+    printf("Hello world from C!\n");
 }
