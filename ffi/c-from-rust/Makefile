@@ -2,11 +2,11 @@
 
 run: main clean
 	./main
-main: main.rs libfoo.a
-	rustc main.rs -L .
+main: src/main.rs libfoo.a
+	rustc src/main.rs -L .
 libfoo.a: foo.o
 	ar rcs libfoo.a foo.o
-foo.o: foo.c
-	clang-11 foo.c -c
+foo.o: src/foo.c
+	clang-11 src/foo.c -c
 clean:
 	rm -rf *.out *.o *.a
