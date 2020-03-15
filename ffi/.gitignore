@@ -3,3 +3,4 @@
 **/main
 **/*.o
 **/*.so
+rust-from-nodejs/node_modules/
