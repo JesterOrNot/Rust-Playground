@@ -6,6 +6,6 @@ edition = "2018"
 
 [lib]
 name = "foo"
-crate-type = ["staticlib"]
+crate-type = ["staticlib", "cdylib"]
 
 [dependencies]
