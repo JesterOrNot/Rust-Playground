@@ -1,4 +1,4 @@
-use logos::Logos;
+use logos::{Logos, Lexer};
 
 macro_rules! gen_lexer {
     ($enumName:ident, $(($token:ident,$target:literal)), *) => {
@@ -8,6 +8,8 @@ macro_rules! gen_lexer {
             End,
             #[error]
             Error,
+            #[token = " "]
+            Whitespace,
             $(
                 #[token = $target]
                 $token,
@@ -16,14 +18,25 @@ macro_rules! gen_lexer {
     };
 }
 
-macro_rules! applyArgs {
-    () => {
-        //
+macro_rules! gen_parse {
+    ($enumName:ident, $funcName:ident, $(($token:ident, $ansi:literal)), *) => {
+        fn $funcName(mut tokens: Lexer<$enumName, &str>) {
+            while tokens.token != $enumName::End {
+                match tokens.token {
+                    $(
+                        $enumName::$token => print!("\x1b[{}m{}\x1b[m", $ansi, tokens.slice()),
+                    )*
+                    _ => print!("{}", tokens.slice())
+                }
+                tokens.advance();
+            }
+        }
     };
 }
 
 fn main() {
     gen_lexer!(lexer, (f, "help"));
-    let lexed = lexer::lexer("help x f");
-    println!("{:#?}", lexed.token)
+    gen_parse!(lexer, parser, (f, "31"));
+    parser(lexer::lexer("help x f"));
+    println!();   
 }
