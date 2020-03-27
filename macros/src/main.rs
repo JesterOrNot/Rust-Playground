@@ -35,8 +35,8 @@ macro_rules! gen_parse {
 }
 
 fn main() {
-    gen_lexer!(lexer, (f, "help"));
-    gen_parse!(lexer, parser, (f, "31"));
+    gen_lexer!(lexer, (KeyWord, "help"));
+    gen_parse!(lexer, parser, (KeyWord, "31"));
     parser(lexer::lexer("help x f"));
     println!();   
 }
