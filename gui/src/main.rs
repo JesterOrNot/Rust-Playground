@@ -1,40 +1,35 @@
-fn main() {
-  // define the gtk application with a unique name and default parameters
-  let application = gtk::Application::new("The.name.goes.here", Default::default())
-      .expect("Initialization failed");
+//! # Basic Sample
+//!
+//! This sample demonstrates how to create a toplevel `window`, set its title, size and
+//! position, how to add a `button` to this `window` and how to connect signals with
+//! actions.
 
-  // this registers a closure (executing our setup_gui function) 
-  //that has to be run on a `activate` event, triggered when the UI is loaded
-  application.connect_activate(move |app| {
-      setup_gui(app);
-  });
+extern crate gio;
+extern crate gtk;
 
-  application.run();
+use gio::prelude::*;
+use gtk::prelude::*;
+
+use std::env::args;
+
+fn build_ui(application: &gtk::Application) {
+    let window = gtk::ApplicationWindow::new(application);
+    window.set_title("Hello World");
+    window.set_border_width(10);
+    window.set_position(gtk::WindowPosition::Center);
+    window.set_default_size(400, 80);
+    let label = gtk::Label::new(Some("Hello World From Rust!"));
+    window.add(&label);
+    window.show_all();
 }
 
-fn setup_gui(app: &Application){
-  
-  // we bake our glade file into the application code itself
-  let glade_src = include_str!("main.glade");
+fn main() {
+    let application = gtk::Application::new(Some("com.github.jesterornot"), Default::default())
+        .expect("Initialization failed...");
 
-  // this builder provides access to all components of the defined ui
-  let builder = Builder::new_from_string(glade_src);
+    application.connect_activate(|app| {
+        build_ui(app);
+    });
 
-  // glade allows us to get UI elements by id but we need to specify the type
-  let window: Window = builder.get_object("wnd_main").expect("Couldn't get window");
-  window.set_title("Memegen");
-  window.set_application(app);
-
-  // the save button, saves the resulting image
-  let btn_save: Button = builder.get_object("btn_save").expect("Couldn't get btn_save");
-  
-  // connect to the clicked event, providing an action handler in the closure
-  btn_save.connect_clicked( 
-    clone!( // clone the references with a macro
-      lines, background_location => move |_| {
-        // invoke our handler with mutable references
-        handle_save(background_location.borrow_mut(),lines.borrow_mut())
-    })
-  );
-  window.show_all();
+    application.run(&args().collect::<Vec<_>>());
 }
