@@ -1,0 +1,8 @@
+[package]
+name = "hello-yew"
+version = "0.1.0"
+authors = ["Sean Hellum <seanhellum45@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+yew = { version = "0.13.0", features = ["std_web"] }
