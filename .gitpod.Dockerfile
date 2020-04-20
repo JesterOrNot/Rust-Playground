@@ -4,4 +4,4 @@ RUN sudo apt-get update \
     && sudo apt-get install -yq \
         libgtk-3-dev
 
-RUN cargo install cargo-web
+RUN bash -cl "cargo install cargo-web"
